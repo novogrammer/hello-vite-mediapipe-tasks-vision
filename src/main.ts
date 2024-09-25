@@ -14,8 +14,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 async function mainAsync(){
   const vision = await FilesetResolver.forVisionTasks(
     // path/to/wasm/root
-    // TODO: ローカルで実行できるようにする
-    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+    // "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+    "./wasm"
   );
   const faceStylizer = await FaceStylizer.createFromOptions(
       vision,
