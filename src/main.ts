@@ -3,15 +3,40 @@ import './style.scss'
 import {FilesetResolver,FaceStylizer} from "@mediapipe/tasks-vision";
 
 
+const modelFilenameList=[
+  "face_stylizer_color_sketch.task",
+  "face_stylizer_color_ink.task",
+  "face_stylizer_oil_painting.task",
+  "face_stylizer_from_colab_example.task",
+];
+
+
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <h1>Hello!</h1>
+  <h1>Hello mediapipe tasks-vision</h1>
+  style: <select id="style-select">${modelFilenameList.map((modelFilename)=>`<option value="${modelFilename}">${modelFilename}</option>`).join("")}</select>
   <p><button id="run">Run</button>数秒かかります</p>
   <p><img id="image" src="./face-stylizer-input.png" alt=""></p>
   <p><canvas id="output" width="256" height="256"></canvas></p>
 `
 
 
+
+
 async function mainAsync(){
+
+    const styleSelect=document.getElementById("style-select") as HTMLSelectElement;
+    if(!styleSelect){
+      throw new Error("styleSelect is null");
+    }
+
+    const styleOption=styleSelect.options[styleSelect.selectedIndex];
+    if(!styleOption){
+      throw new Error("styleOption is null");
+    }
+
+    
+
+
   const vision = await FilesetResolver.forVisionTasks(
     // path/to/wasm/root
     // "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
@@ -21,7 +46,11 @@ async function mainAsync(){
       vision,
       {
         baseOptions: {
-          modelAssetPath: "models/face_stylizer_color_sketch.task"
+          modelAssetPath: `models/${styleOption.value}`
+          // modelAssetPath: "models/face_stylizer_color_sketch.task"
+          // modelAssetPath: "models/face_stylizer_color_ink.task"
+          // modelAssetPath: "models/face_stylizer_oil_painting.task"
+          // modelAssetPath: "models/face_stylizer_from_colab_example.task"
         },
       });
   if(!faceStylizer){
